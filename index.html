@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cap Gallery - Sacoche & Caba</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      color: #003366;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    body.dark {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    #whiteHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1E3A8A;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    body.dark #whiteHeader {
+      background-color: #1a1a1a;
+      color: #9fcfff;
+      box-shadow: 0 2px 8px rgba(255 255 255 / 0.1);
+    }
+    #siteTitle {
+      flex-shrink: 0;
+    }
+    #searchContainer {
+      flex-grow: 1;
+      max-width: 400px;
+      position: relative;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    body.dark #searchInput {
+      background-color: #333;
+      border-color: #555;
+      color: #eee;
+    }
+    #suggestions {
+      position: absolute;
+      top: 38px;
+      width: 100%;
+      background: white;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1001;
+    }
+    body.dark #suggestions {
+      background: #222;
+      box-shadow: 0 2px 8px rgba(255 255 255 / 0.1);
+    }
+    #suggestions div {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+      transition: background-color 0.2s ease;
+    }
+    body.dark #suggestions div {
+      border-bottom: 1px solid #444;
+    }
+    #suggestions div:hover {
+      background-color: #1e40af;
+      color: white;
+    }
+
+    #darkModeToggle {
+      cursor: pointer;
+      background-color: #1E3A8A;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      border: none;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    #darkModeToggle:hover {
+      background-color: #3749a0;
+    }
+    body.dark #darkModeToggle {
+      background-color: #f0f4f8;
+      color: #1E3A8A;
+    }
+    body.dark #darkModeToggle:hover {
+      background-color: #d4dbf5;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 100px auto 60px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding: 0 12px;
+      transition: color 0.4s ease;
+    }
+    body.dark main a.card {
+      background-color: #222;
+      box-shadow: 0 2px 10px rgba(255 255 255 / 0.1);
+    }
+
+    a.card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-decoration: none;
+      color: inherit;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.3s ease;
+    }
+    a.card:hover {
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
+    }
+    a.card img {
+      max-width: 100%;
+      height: 140px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      border-radius: 10px;
+    }
+    a.card h3 {
+      margin: 0 0 6px 0;
+      font-weight: 600;
+      font-size: 18px;
+      text-align: center;
+    }
+    a.card p.price {
+      margin: 0;
+      font-weight: 700;
+      font-size: 16px;
+      color: #1E3A8A;
+    }
+    body.dark a.card p.price {
+      color: #a0c4ff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      #searchContainer {
+        max-width: 300px;
+      }
+    }
+    @media (max-width: 480px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      #searchContainer {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="whiteHeader">
+    <div id="siteTitle">Sacoche & Caba</div>
+    <div id="searchContainer">
+      <input type="search" id="searchInput" placeholder="Search caps..." autocomplete="off" />
+      <div id="suggestions"></div>
+    </div>
+    <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+  </div>
+
+  <main id="capsGrid">
+    <!-- Cards will be injected here by JS -->
+  </main>
+
+  <script>
+    const capsData = {
+      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png" },
+      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png" },
+      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png" },
+      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png" },
+      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png" },
+      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png" },
+      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png" },
+      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png" },
+      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png" },
+      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png" },
+      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png" },
+      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png" }
+    };
+
+    const capsGrid = document.getElementById('capsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const suggestions = document.getElementById('suggestions');
+
+    function renderCaps(filter = '') {
+      capsGrid.innerHTML = '';
+      const filterLower = filter.toLowerCase();
+
+      const filteredCaps = Object.entries(capsData).filter(([id, cap]) => 
+        cap.name.toLowerCase().includes(filterLower)
+      );
+
+      filteredCaps.forEach(([id, cap]) => {
+        const card = document.createElement('a');
+        card.href = `details.html?id=${id}`;
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${cap.image}" alt="${cap.name}" />
+          <h3>${cap.name}</h3>
+          <p class="price">${cap.price}</p>
+        `;
+        capsGrid.appendChild(card);
+      });
+
+      if (filteredCaps.length === 0) {
+        capsGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No results found.</p>';
+      }
+    }
+
+    // Suggestions logic
+    searchInput.addEventListener('input', () => {
+      const val = searchInput.value.trim().toLowerCase();
+      if (!val) {
+        suggestions.style.display = 'none';
+        renderCaps();
+        return;
+      }
+      const matched = Object.entries(capsData).filter(([id, cap]) => 
+        cap.name.toLowerCase().includes(val)
+      );
+
+      suggestions.innerHTML = '';
+      if (matched.length === 0) {
+        suggestions.style.display = 'none';
+        renderCaps(val);
+        return;
+      }
+
+      matched.forEach(([id, cap]) => {
+        const div = document.createElement('div');
+        div.textContent = cap.name;
+        div.addEventListener('click', () => {
+          searchInput.value = cap.name;
+          suggestions.style.display = 'none';
+          renderCaps(cap.name);
+        });
+        suggestions.appendChild(div);
+      });
+
+      suggestions.style.display = 'block';
+      renderCaps(val);
+    });
+
+    // Close suggestions if click outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+        suggestions.style.display = 'none';
+      }
+    });
+
+    // Dark mode toggle logic with localStorage persistence
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // On page load - apply dark mode if enabled
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark');
+      darkModeToggle.textContent = '☀️';
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      if (body.classList.contains('dark')) {
+        darkModeToggle.textContent = '☀️';
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        darkModeToggle.textContent = '🌙';
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
+
+    // Initial render
+    renderCaps();
+  </script>
+
+</body>
+</html>
