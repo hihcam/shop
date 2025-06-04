@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cap Collection - Sacoche & Caba</title>
+  <title>Cap Details - Sacoche & Caba</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -139,153 +139,165 @@
     
     /* Main content */
     main {
-      max-width: 1400px;
+      max-width: 1000px;
       margin: 90px auto 30px;
       padding: 20px 5%;
     }
     
-    .page-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-      position: relative;
-      display: inline-block;
-    }
-    
-    .page-title::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 50px;
-      height: 3px;
-      background: var(--primary);
-      border-radius: 3px;
-    }
-    
-    /* Caps grid */
-    .caps-grid {
+    /* Product section */
+    .product-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
     }
     
-    .cap-card {
-      background: var(--card-bg);
+    .product-gallery {
+      position: relative;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      border: 1px solid var(--border);
-      position: relative;
-      cursor: pointer;
     }
     
-    .cap-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(30, 58, 138, 0.2);
-    }
-    
-    body.dark .cap-card:hover {
-      box-shadow: 0 10px 25px rgba(30, 58, 138, 0.4);
-    }
-    
-    .cap-image {
+    .product-image {
       width: 100%;
-      height: 200px;
+      height: auto;
+      border-radius: 12px;
       object-fit: cover;
       transition: var(--transition);
+      box-shadow: var(--shadow);
     }
     
-    .cap-card:hover .cap-image {
-      transform: scale(1.03);
+    .product-info {
+      display: flex;
+      flex-direction: column;
     }
     
-    .cap-info {
-      padding: 1.25rem;
+    .product-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary);
     }
     
-    .cap-name {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-    
-    .cap-price {
+    .product-price {
+      font-size: 1.75rem;
       font-weight: 700;
       color: var(--primary);
-      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .product-description {
+      margin-bottom: 2rem;
+      color: var(--text-light);
+      line-height: 1.7;
     }
     
     /* Favorite button */
     .favorite-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(255, 255, 255, 0.8);
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
+      margin-top: 1rem;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      width: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       cursor: pointer;
       color: var(--text);
       transition: var(--transition);
-      z-index: 2;
     }
     
     .favorite-btn:hover {
       color: var(--primary);
-      transform: scale(1.1);
+      transform: scale(1.02);
     }
     
     .favorite-btn.active {
       color: #ff4757;
     }
     
-    .favorite-btn.active i {
-      font-weight: 900;
+    .favorite-btn i {
+      margin-right: 8px;
     }
     
-    /* Floating action button for mobile */
-    .fab {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
+    /* Contact card */
+    .contact-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .contact-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--primary);
+    }
+    
+    .contact-item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      z-index: 90;
-      cursor: pointer;
-      transition: var(--transition);
-      display: none;
+      gap: 12px;
+      margin-bottom: 1rem;
+      font-weight: 500;
     }
     
-    .fab:hover {
-      transform: scale(1.1);
+    .contact-item i {
+      color: var(--primary);
+      width: 24px;
+      text-align: center;
+    }
+    
+    .contact-item a {
+      color: inherit;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .contact-item a:hover {
+      color: var(--primary);
+    }
+    
+    /* Back button */
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .back-button:hover {
       background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
     }
     
     /* Responsive */
     @media (max-width: 768px) {
-      .caps-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1rem;
+      .product-container {
+        grid-template-columns: 1fr;
       }
       
-      .cap-image {
-        height: 180px;
+      .product-gallery {
+        max-width: 500px;
+        margin: 0 auto;
       }
     }
     
@@ -310,16 +322,16 @@
         padding: 15px;
       }
       
-      .page-title {
+      .product-title {
+        font-size: 1.75rem;
+      }
+      
+      .product-price {
         font-size: 1.5rem;
       }
       
-      .caps-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .fab {
-        display: flex;
+      .contact-card {
+        padding: 1.25rem;
       }
     }
     
@@ -329,23 +341,9 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
-    .cap-card {
+    .product-container, .contact-card {
       animation: fadeIn 0.5s ease forwards;
-      opacity: 0;
     }
-    
-    .cap-card:nth-child(1) { animation-delay: 0.1s; }
-    .cap-card:nth-child(2) { animation-delay: 0.2s; }
-    .cap-card:nth-child(3) { animation-delay: 0.3s; }
-    .cap-card:nth-child(4) { animation-delay: 0.4s; }
-    .cap-card:nth-child(5) { animation-delay: 0.5s; }
-    .cap-card:nth-child(6) { animation-delay: 0.6s; }
-    .cap-card:nth-child(7) { animation-delay: 0.7s; }
-    .cap-card:nth-child(8) { animation-delay: 0.8s; }
-    .cap-card:nth-child(9) { animation-delay: 0.9s; }
-    .cap-card:nth-child(10) { animation-delay: 1s; }
-    .cap-card:nth-child(11) { animation-delay: 1.1s; }
-    .cap-card:nth-child(12) { animation-delay: 1.2s; }
   </style>
 </head>
 <body>
@@ -364,33 +362,30 @@
     </div>
   </header>
 
-  <main>
-    <h1 class="page-title">Our Cap Collection</h1>
-    <p style="color: var(--text-light); margin-bottom: 1rem;">Discover our premium selection of stylish caps</p>
-    
-    <div class="caps-grid" id="capsGrid">
-      <!-- Caps will be loaded here -->
-    </div>
+  <main id="capDetails">
+    <!-- Cap details will be loaded here -->
   </main>
-
-  <div class="fab" id="backToTop">
-    <i class="fas fa-arrow-up"></i>
-  </div>
 
   <script>
     const capsData = {
-      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png" },
-      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png" },
-      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png" },
-      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png" },
-      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png" },
-      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png" },
-      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png" },
-      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png" },
-      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png" },
-      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png" },
-      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png" },
-      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png" }
+      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png", description: "A timeless blue cap perfect for every occasion. Made with premium cotton fabric for maximum comfort and durability." },
+      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png", description: "Sporty and stylish red cap with breathable fabric. Designed for active lifestyles with moisture-wicking technology." },
+      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png", description: "Lightweight green cap ideal for summer days. UV protection fabric keeps you cool under the sun." },
+      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png", description: "Classic black snapback with adjustable strap. Features a structured front panel for a clean look." },
+      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png", description: "Clean white cap for casual wear. The minimalist design pairs well with any outfit." },
+      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png", description: "Vintage yellow cap with retro vibe. Distressed details give it an authentic worn-in look." },
+      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png", description: "Simple and elegant grey cap. The perfect accessory for a modern, understated style." },
+      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png", description: "Premium brown leather cap for a rugged look. Handcrafted with genuine leather for long-lasting wear." },
+      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png", description: "Bright orange cap to stand out in the crowd. Made with quick-dry fabric for all-day comfort." },
+      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png", description: "Retro style purple cap with cool design. Inspired by 90s streetwear fashion." },
+      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png", description: "Feminine pink cap with floral details. Delicate embroidery adds a touch of elegance." },
+      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png", description: "Classic navy blue cap suitable for all ages. Versatile design works for both casual and smart occasions." }
+    };
+
+    const contactInfo = {
+      phone: "+213 555 123 456",
+      location: "Algiers, Algeria",
+      email: "contact@sacoche-caba.dz"
     };
 
     // Favorite system
@@ -412,14 +407,10 @@
         const capId = btn.getAttribute('data-cap-id');
         if (favorites[capId]) {
           btn.classList.add('active');
-          btn.innerHTML = btn.innerHTML.includes('Add to') ? 
-            '<i class="fas fa-heart"></i> Remove from Favorites' : 
-            '<i class="fas fa-heart"></i>';
+          btn.innerHTML = '<i class="fas fa-heart"></i> Remove from Favorites';
         } else {
           btn.classList.remove('active');
-          btn.innerHTML = btn.innerHTML.includes('Add to') ? 
-            '<i class="far fa-heart"></i> Add to Favorites' : 
-            '<i class="far fa-heart"></i>';
+          btn.innerHTML = '<i class="far fa-heart"></i> Add to Favorites';
         }
       });
     }
@@ -433,28 +424,66 @@
       }
     }
 
-    // Render caps
-    function renderCaps() {
-      const grid = document.getElementById('capsGrid');
-      grid.innerHTML = '';
+    // Get cap ID from URL
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Render cap details
+    function renderCapDetails(id) {
+      const container = document.getElementById('capDetails');
       
-      Object.entries(capsData).forEach(([id, cap]) => {
-        const card = document.createElement('div');
-        card.className = 'cap-card';
-        card.innerHTML = `
-          <a href="details.html?id=${id}" style="text-decoration: none; color: inherit;">
-            <img src="${cap.image}" alt="${cap.name}" class="cap-image">
-            <div class="cap-info">
-              <h3 class="cap-name">${cap.name}</h3>
-              <p class="cap-price">${cap.price}</p>
-            </div>
-          </a>
-          <button class="favorite-btn" data-cap-id="${id}">
-            <i class="far fa-heart"></i>
-          </button>
+      if (!id || !capsData[id]) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <h2 style="margin-bottom: 1rem;">Cap not found</h2>
+            <a href="index.html" class="back-button">
+              <i class="fas fa-arrow-left"></i> Back to Gallery
+            </a>
+          </div>
         `;
-        grid.appendChild(card);
-      });
+        return;
+      }
+      
+      const cap = capsData[id];
+      container.innerHTML = `
+        <div class="product-container">
+          <div class="product-gallery">
+            <img src="${cap.image}" alt="${cap.name}" class="product-image">
+          </div>
+          <div class="product-info">
+            <h1 class="product-title">${cap.name}</h1>
+            <p class="product-price">
+              <i class="fas fa-tag"></i> ${cap.price}
+            </p>
+            <p class="product-description">${cap.description}</p>
+            <button class="favorite-btn" data-cap-id="${id}">
+              <i class="far fa-heart"></i> Add to Favorites
+            </button>
+          </div>
+        </div>
+        
+        <div class="contact-card">
+          <h3 class="contact-title">Contact Us</h3>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <a href="tel:${contactInfo.phone}">${contactInfo.phone}</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:${contactInfo.email}">${contactInfo.email}</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>${contactInfo.location}</span>
+          </div>
+        </div>
+        
+        <a href="index.html" class="back-button">
+          <i class="fas fa-arrow-left"></i> Back to Gallery
+        </a>
+      `;
     }
 
     // Dark mode toggle
@@ -479,22 +508,6 @@
       }
       updateTheme();
     });
-    
-    // Back to top button
-    const backToTop = document.getElementById('backToTop');
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTop.style.opacity = '1';
-        backToTop.style.visibility = 'visible';
-      } else {
-        backToTop.style.opacity = '0';
-        backToTop.style.visibility = 'hidden';
-      }
-    });
 
     // Add event listeners for favorite buttons
     document.addEventListener('click', (e) => {
@@ -507,9 +520,10 @@
 
     // Initialize
     updateTheme();
-    renderCaps();
-    updateFavoriteButtons();
     updateFavoritesCount();
+    const capId = getQueryParam('id');
+    renderCapDetails(capId);
+    updateFavoriteButtons();
   </script>
 </body>
 </html>
