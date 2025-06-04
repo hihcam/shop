@@ -106,6 +106,8 @@
       align-items: center;
       justify-content: center;
       transition: background-color 0.3s ease;
+      flex-shrink: 0;
+      margin-left: 10px;
     }
     #darkModeToggle:hover {
       background-color: #3749a0;
@@ -185,6 +187,13 @@
       }
       #searchContainer {
         max-width: 100%;
+      }
+      /* Smaller toggle on phone */
+      #darkModeToggle {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        margin-left: 8px;
       }
     }
   </style>
@@ -294,7 +303,6 @@
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
 
-    // On page load - apply dark mode if enabled
     if (localStorage.getItem('darkMode') === 'enabled') {
       body.classList.add('dark');
       darkModeToggle.textContent = '☀️';
