@@ -1,275 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cap Details - Sacoche & Caba</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f0f4f8;
+    :root {
+      --primary: #3b82f6;
+      --primary-light: #93c5fd;
+      --primary-dark: #1d4ed8;
+      --light: #f8fafc;
+      --dark: #0f172a;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
       margin: 0;
       padding: 0;
-      color: #003366;
-      transition: background-color 0.4s ease, color 0.4s ease;
+      box-sizing: border-box;
     }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: var(--text);
+      line-height: 1.5;
+      transition: var(--transition);
+    }
+    
     body.dark {
-      background-color: #121212;
-      color: #e0e0e0;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      --card-bg: #1e293b;
+      --text: #f1f5f9;
+      --text-light: #94a3b8;
+      --border: #334155;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
-    #whiteHeader {
+    
+    /* Header */
+    header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 60px;
-      background-color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
+      height: 70px;
+      background-color: var(--light);
+      box-shadow: var(--shadow);
+      z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 40px;
-      padding: 0 20px;
-      font-size: 18px;
-      font-weight: 600;
-      color: #1E3A8A;
-      transition: background-color 0.4s ease, color 0.4s ease;
+      justify-content: space-between;
+      padding: 0 5%;
+      transition: var(--transition);
     }
-    body.dark #whiteHeader {
-      background-color: #1a1a1a;
-      color: #9fcfff;
-      box-shadow: 0 2px 8px rgba(255 255 255 / 0.1);
+    
+    body.dark header {
+      background-color: #1e293b;
     }
-    #siteTitle {
-      flex-shrink: 0;
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
       cursor: pointer;
     }
-    #darkModeToggle {
-      cursor: pointer;
-      background-color: #1E3A8A;
+    
+    .brand-icon {
+      font-size: 1.5rem;
+    }
+    
+    /* Dark mode toggle */
+    .theme-toggle {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      border: none;
+      background: var(--primary);
       color: white;
-      font-size: 20px;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.3s ease;
-      flex-shrink: 0;
-      margin-left: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
     }
-    #darkModeToggle:hover {
-      background-color: #3749a0;
+    
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
     }
-    body.dark #darkModeToggle {
-      background-color: #f0f4f8;
-      color: #1E3A8A;
-    }
-    body.dark #darkModeToggle:hover {
-      background-color: #d4dbf5;
-    }
-
+    
+    /* Main content */
     main {
-      max-width: 700px;
-      margin: 80px auto 60px;
-      padding: 0 20px;
-      transition: color 0.4s ease;
+      max-width: 1000px;
+      margin: 90px auto 30px;
+      padding: 20px 5%;
     }
-
-    .cap-image {
+    
+    /* Product section */
+    .product-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .product-gallery {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .product-image {
       width: 100%;
-      max-height: 400px;
-      object-fit: contain;
+      height: auto;
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      margin-bottom: 24px;
-      background: white;
-      transition: background-color 0.4s ease;
+      object-fit: cover;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
     }
-    body.dark .cap-image {
-      background: #222;
-      box-shadow: 0 2px 12px rgba(255 255 255 / 0.1);
+    
+    .product-info {
+      display: flex;
+      flex-direction: column;
     }
-
-    h1 {
+    
+    .product-title {
+      font-size: 2rem;
       font-weight: 700;
-      font-size: 28px;
-      margin-bottom: 12px;
-      color: #1E3A8A;
+      margin-bottom: 1rem;
+      color: var(--primary);
     }
-    body.dark h1 {
-      color: #9fcfff;
-    }
-
-    p.price {
+    
+    .product-price {
+      font-size: 1.75rem;
       font-weight: 700;
-      font-size: 22px;
-      color: #1E3A8A;
-      margin-bottom: 20px;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    body.dark p.price {
-      color: #a0c4ff;
+    
+    .product-description {
+      margin-bottom: 2rem;
+      color: var(--text-light);
+      line-height: 1.7;
     }
-
-    p.description {
-      font-size: 16px;
-      line-height: 1.5;
-      color: #333;
-      margin-bottom: 30px;
-    }
-    body.dark p.description {
-      color: #ccc;
-    }
-
-    /* New Contact Card styles */
+    
+    /* Contact card */
     .contact-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
-      padding: 20px 24px;
-      box-shadow: 0 6px 15px rgba(30, 58, 138, 0.15);
-      margin-bottom: 30px;
-      color: #1E3A8A;
-      transition: background-color 0.4s ease, color 0.4s ease;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
     }
-    body.dark .contact-card {
-      background: #1a1a1a;
-      box-shadow: 0 6px 15px rgba(159, 207, 255, 0.15);
-      color: #9fcfff;
-    }
-    .contact-card p {
-      margin: 10px 0;
+    
+    .contact-title {
+      font-size: 1.25rem;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 1.3;
+      margin-bottom: 1.25rem;
+      color: var(--primary);
     }
-    .contact-card strong {
-      display: inline-block;
-      width: 80px;
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      font-weight: 500;
     }
-    .contact-card a {
+    
+    .contact-item i {
+      color: var(--primary);
+      width: 24px;
+      text-align: center;
+    }
+    
+    .contact-item a {
       color: inherit;
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: var(--transition);
     }
-    .contact-card a:hover {
-      color: #3749a0;
+    
+    .contact-item a:hover {
+      color: var(--primary);
     }
-    body.dark .contact-card a:hover {
-      color: #d4dbf5;
-    }
-
-    a.back-link {
-      display: inline-block;
-      margin-top: 10px;
-      color: #1E3A8A;
-      font-weight: 600;
-      text-decoration: none;
-      border: 2px solid #1E3A8A;
-      padding: 8px 14px;
-      border-radius: 8px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    a.back-link:hover {
-      background-color: #1E3A8A;
+    
+    /* Back button */
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
       color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
-    body.dark a.back-link {
-      color: #9fcfff;
-      border-color: #9fcfff;
+    
+    .back-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
     }
-    body.dark a.back-link:hover {
-      background-color: #9fcfff;
-      color: #1a1a1a;
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-gallery {
+        max-width: 500px;
+        margin: 0 auto;
+      }
     }
-
+    
+    @media (max-width: 480px) {
+      header {
+        height: 60px;
+        padding: 0 15px;
+      }
+      
+      .brand {
+        font-size: 1.1rem;
+      }
+      
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+      }
+      
+      main {
+        margin-top: 70px;
+        padding: 15px;
+      }
+      
+      .product-title {
+        font-size: 1.75rem;
+      }
+      
+      .product-price {
+        font-size: 1.5rem;
+      }
+      
+      .contact-card {
+        padding: 1.25rem;
+      }
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .product-container, .contact-card {
+      animation: fadeIn 0.5s ease forwards;
+    }
   </style>
 </head>
 <body>
-
-  <header id="whiteHeader">
-    <div id="siteTitle" onclick="window.location.href='index.html'">Sacoche & Caba</div>
-    <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+  <header>
+    <div class="brand" onclick="window.location.href='index.html'">
+      <i class="fas fa-crown brand-icon"></i>
+      <span>Sacoche & Caba</span>
+    </div>
+    <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+      <i class="fas fa-moon"></i>
+    </button>
   </header>
 
   <main id="capDetails">
-    <!-- Cap details loaded by JS -->
+    <!-- Cap details will be loaded here -->
   </main>
 
   <script>
     const capsData = {
-      cap1: { name: "Blue Classic Cap", price: "2000 Da", image: "cap1.png", description: "A timeless blue cap perfect for every occasion." },
-      cap2: { name: "Red Sport Cap", price: "2000 Da", image: "cap2.png", description: "Sporty and stylish red cap with breathable fabric." },
-      cap3: { name: "Green Summer Cap", price: "2000 Da", image: "cap3.png", description: "Lightweight green cap ideal for summer days." },
-      cap4: { name: "Black Snapback", price: "2000 Da", image: "cap4.png", description: "Classic black snapback with adjustable strap." },
-      cap5: { name: "White Casual Cap", price: "2000 Da", image: "cap5.png", description: "Clean white cap for casual wear." },
-      cap6: { name: "Yellow Vintage Cap", price: "2000 Da", image: "cap6.png", description: "Vintage yellow cap with retro vibe." },
-      cap7: { name: "Grey Minimalist Cap", price: "2000 Da", image: "cap7.png", description: "Simple and elegant grey cap." },
-      cap8: { name: "Brown Leather Cap", price: "2000 Da", image: "cap8.png", description: "Premium brown leather cap for a rugged look." },
-      cap9: { name: "Orange Bright Cap", price: "2000 Da", image: "cap9.png", description: "Bright orange cap to stand out in the crowd." },
-      cap10: { name: "Purple Retro Cap", price: "2000 Da", image: "cap10.png", description: "Retro style purple cap with cool design." },
-      cap11: { name: "Pink Floral Cap", price: "2000 Da", image: "cap11.png", description: "Feminine pink cap with floral details." },
-      cap12: { name: "Navy Blue Cap", price: "2000 Da", image: "cap12.png", description: "Classic navy blue cap suitable for all ages." }
+      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png", description: "A timeless blue cap perfect for every occasion. Made with premium cotton fabric for maximum comfort and durability." },
+      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png", description: "Sporty and stylish red cap with breathable fabric. Designed for active lifestyles with moisture-wicking technology." },
+      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png", description: "Lightweight green cap ideal for summer days. UV protection fabric keeps you cool under the sun." },
+      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png", description: "Classic black snapback with adjustable strap. Features a structured front panel for a clean look." },
+      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png", description: "Clean white cap for casual wear. The minimalist design pairs well with any outfit." },
+      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png", description: "Vintage yellow cap with retro vibe. Distressed details give it an authentic worn-in look." },
+      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png", description: "Simple and elegant grey cap. The perfect accessory for a modern, understated style." },
+      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png", description: "Premium brown leather cap for a rugged look. Handcrafted with genuine leather for long-lasting wear." },
+      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png", description: "Bright orange cap to stand out in the crowd. Made with quick-dry fabric for all-day comfort." },
+      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png", description: "Retro style purple cap with cool design. Inspired by 90s streetwear fashion." },
+      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png", description: "Feminine pink cap with floral details. Delicate embroidery adds a touch of elegance." },
+      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png", description: "Classic navy blue cap suitable for all ages. Versatile design works for both casual and smart occasions." }
     };
 
     const contactInfo = {
       phone: "+213 555 123 456",
-      location: "Algiers, Algeria"
+      location: "Algiers, Algeria",
+      email: "contact@sacoche-caba.dz"
     };
 
-    const capDetailsContainer = document.getElementById('capDetails');
-
+    // Get cap ID from URL
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
     }
 
+    // Render cap details
     function renderCapDetails(id) {
+      const container = document.getElementById('capDetails');
+      
       if (!id || !capsData[id]) {
-        capDetailsContainer.innerHTML = `<p>Cap not found. <a href="index.html">Go back</a></p>`;
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <h2 style="margin-bottom: 1rem;">Cap not found</h2>
+            <a href="index.html" class="back-button">
+              <i class="fas fa-arrow-left"></i> Back to Gallery
+            </a>
+          </div>
+        `;
         return;
       }
+      
       const cap = capsData[id];
-      capDetailsContainer.innerHTML = `
-        <img class="cap-image" src="${cap.image}" alt="${cap.name}" />
-        <h1>${cap.name}</h1>
-        <p class="price">${cap.price}</p>
-        <p class="description">${cap.description}</p>
-
-        <div class="contact-card">
-          <p><strong>Phone:</strong> <a href="tel:${contactInfo.phone}">${contactInfo.phone}</a></p>
-          <p><strong>Location:</strong> ${contactInfo.location}</p>
+      container.innerHTML = `
+        <div class="product-container">
+          <div class="product-gallery">
+            <img src="${cap.image}" alt="${cap.name}" class="product-image">
+          </div>
+          <div class="product-info">
+            <h1 class="product-title">${cap.name}</h1>
+            <p class="product-price">
+              <i class="fas fa-tag"></i> ${cap.price}
+            </p>
+            <p class="product-description">${cap.description}</p>
+          </div>
         </div>
-
-        <a href="index.html" class="back-link">← Back to Gallery</a>
+        
+        <div class="contact-card">
+          <h3 class="contact-title">Contact Us</h3>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <a href="tel:${contactInfo.phone}">${contactInfo.phone}</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:${contactInfo.email}">${contactInfo.email}</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>${contactInfo.location}</span>
+          </div>
+        </div>
+        
+        <a href="index.html" class="back-button">
+          <i class="fas fa-arrow-left"></i> Back to Gallery
+        </a>
       `;
     }
 
+    // Dark mode toggle
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
-
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark');
-      darkModeToggle.textContent = '☀️';
-    }
-
-    darkModeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark');
-      if (body.classList.contains('dark')) {
-        darkModeToggle.textContent = '☀️';
-        localStorage.setItem('darkMode', 'enabled');
+    
+    function updateTheme() {
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
       } else {
-        darkModeToggle.textContent = '🌙';
-        localStorage.setItem('darkMode', 'disabled');
+        body.classList.remove('dark');
+        darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
       }
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      if (body.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'disabled');
+      } else {
+        localStorage.setItem('darkMode', 'enabled');
+      }
+      updateTheme();
     });
 
+    // Initialize
+    updateTheme();
     const capId = getQueryParam('id');
     renderCapDetails(capId);
   </script>
-
 </body>
 </html>
