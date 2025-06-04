@@ -34,7 +34,7 @@
       background-color: #f8fafc;
       color: var(--text);
       line-height: 1.5;
-      transition: var(--transition);
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
     
     body.dark {
@@ -164,6 +164,28 @@
       border-radius: 3px;
     }
     
+    /* Loading spinner */
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      padding: 3rem;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
     /* Caps grid */
     .caps-grid {
       display: grid;
@@ -197,6 +219,7 @@
       height: 200px;
       object-fit: cover;
       transition: var(--transition);
+      background-color: #f1f5f9;
     }
     
     .cap-card:hover .cap-image {
@@ -244,12 +267,26 @@
       transform: scale(1.1);
     }
     
+    .favorite-btn:active {
+      transform: scale(0.95);
+    }
+    
     .favorite-btn.active {
       color: #ff4757;
     }
     
     .favorite-btn.active i {
       font-weight: 900;
+    }
+    
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
     
     /* Floating action button for mobile */
@@ -270,6 +307,13 @@
       cursor: pointer;
       transition: var(--transition);
       display: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .fab.visible {
+      opacity: 1;
+      visibility: visible;
     }
     
     .fab:hover {
@@ -355,7 +399,7 @@
       <span>Sacoche & Caba</span>
     </div>
     <div class="header-actions">
-      <a href="favorites.html" class="favorites-link" data-count="0">
+      <a href="favorites.html" class="favorites-link" data-count="0" aria-label="View favorites">
         <i class="fas fa-heart"></i>
       </a>
       <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
@@ -368,12 +412,16 @@
     <h1 class="page-title">Our Cap Collection</h1>
     <p style="color: var(--text-light); margin-bottom: 1rem;">Discover our premium selection of stylish caps</p>
     
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+    </div>
+    
     <div class="caps-grid" id="capsGrid">
       <!-- Caps will be loaded here -->
     </div>
   </main>
 
-  <div class="fab" id="backToTop">
+  <div class="fab" id="backToTop" aria-label="Back to top">
     <i class="fas fa-arrow-up"></i>
   </div>
 
@@ -405,6 +453,16 @@
       localStorage.setItem('favorites', JSON.stringify(favorites));
       updateFavoriteButtons();
       updateFavoritesCount();
+      
+      // Add visual feedback
+      const btn = document.querySelector(`.favorite-btn[data-cap-id="${capId}"]`);
+      if (btn) {
+        btn.classList.add('pulse');
+        setTimeout(() => btn.classList.remove('pulse'), 500);
+      }
+      
+      // Haptic feedback on mobile
+      if (navigator.vibrate) navigator.vibrate(50);
     }
 
     function updateFavoriteButtons() {
@@ -412,14 +470,10 @@
         const capId = btn.getAttribute('data-cap-id');
         if (favorites[capId]) {
           btn.classList.add('active');
-          btn.innerHTML = btn.innerHTML.includes('Add to') ? 
-            '<i class="fas fa-heart"></i> Remove from Favorites' : 
-            '<i class="fas fa-heart"></i>';
+          btn.innerHTML = '<i class="fas fa-heart"></i>';
         } else {
           btn.classList.remove('active');
-          btn.innerHTML = btn.innerHTML.includes('Add to') ? 
-            '<i class="far fa-heart"></i> Add to Favorites' : 
-            '<i class="far fa-heart"></i>';
+          btn.innerHTML = '<i class="far fa-heart"></i>';
         }
       });
     }
@@ -433,7 +487,7 @@
       }
     }
 
-    // Render caps
+    // Render caps with lazy loading
     function renderCaps() {
       const grid = document.getElementById('capsGrid');
       grid.innerHTML = '';
@@ -442,15 +496,15 @@
         const card = document.createElement('div');
         card.className = 'cap-card';
         card.innerHTML = `
-          <a href="details.html?id=${id}" style="text-decoration: none; color: inherit;">
-            <img src="${cap.image}" alt="${cap.name}" class="cap-image">
+          <a href="details.html?id=${id}" style="text-decoration: none; color: inherit;" aria-label="${cap.name} - ${cap.price}">
+            <img src="${cap.image}" alt="${cap.name}" class="cap-image" loading="lazy" onerror="this.src='placeholder.jpg';this.alt='Cap image not available'">
             <div class="cap-info">
               <h3 class="cap-name">${cap.name}</h3>
               <p class="cap-price">${cap.price}</p>
             </div>
           </a>
-          <button class="favorite-btn" data-cap-id="${id}">
-            <i class="far fa-heart"></i>
+          <button class="favorite-btn" data-cap-id="${id}" aria-label="${favorites[id] ? 'Remove from favorites' : 'Add to favorites'}">
+            <i class="${favorites[id] ? 'fas' : 'far'} fa-heart"></i>
           </button>
         `;
         grid.appendChild(card);
@@ -465,9 +519,11 @@
       if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
         body.classList.remove('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
     
@@ -482,18 +538,21 @@
     
     // Back to top button
     const backToTop = document.getElementById('backToTop');
+    let scrollTimeout;
+    
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
     window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTop.style.opacity = '1';
-        backToTop.style.visibility = 'visible';
-      } else {
-        backToTop.style.opacity = '0';
-        backToTop.style.visibility = 'hidden';
-      }
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      }, 100);
     });
 
     // Add event listeners for favorite buttons
@@ -505,11 +564,22 @@
       }
     });
 
-    // Initialize
+    // Initialize with simulated loading
     updateTheme();
-    renderCaps();
-    updateFavoriteButtons();
     updateFavoritesCount();
+    
+    // Show loading spinner
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
+    // Simulate loading delay for UX
+    setTimeout(() => {
+      renderCaps();
+      updateFavoriteButtons();
+      loadingSpinner.style.opacity = '0';
+      setTimeout(() => {
+        loadingSpinner.style.display = 'none';
+      }, 300);
+    }, 800);
   </script>
 </body>
 </html>
