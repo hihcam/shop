@@ -34,7 +34,7 @@
       background-color: #f8fafc;
       color: var(--text);
       line-height: 1.5;
-      transition: var(--transition);
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
     
     body.dark {
@@ -196,6 +196,7 @@
       height: 200px;
       object-fit: cover;
       transition: var(--transition);
+      background-color: #f1f5f9;
     }
     
     .cap-card:hover .cap-image {
@@ -243,12 +244,26 @@
       transform: scale(1.1);
     }
     
+    .favorite-btn:active {
+      transform: scale(0.95);
+    }
+    
     .favorite-btn.active {
       color: #ff4757;
     }
     
     .favorite-btn.active i {
       font-weight: 900;
+    }
+    
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
     
     /* Back button */
@@ -273,6 +288,11 @@
       background: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+    
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
     }
     
     /* Empty state */
@@ -371,7 +391,7 @@
       <span>Sacoche & Caba</span>
     </div>
     <div class="header-actions">
-      <a href="favorites.html" class="favorites-link" data-count="0">
+      <a href="favorites.html" class="favorites-link" data-count="0" aria-label="View favorites">
         <i class="fas fa-heart"></i>
       </a>
       <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
@@ -427,6 +447,16 @@
       updateFavoriteButtons();
       updateFavoritesCount();
       loadFavorites();
+      
+      // Add visual feedback
+      const btn = document.querySelector(`.favorite-btn[data-cap-id="${capId}"]`);
+      if (btn) {
+        btn.classList.add('pulse');
+        setTimeout(() => btn.classList.remove('pulse'), 500);
+      }
+      
+      // Haptic feedback on mobile
+      if (navigator.vibrate) navigator.vibrate(50);
     }
 
     function updateFavoriteButtons() {
@@ -435,9 +465,11 @@
         if (favorites[capId]) {
           btn.classList.add('active');
           btn.innerHTML = '<i class="fas fa-heart"></i>';
+          btn.setAttribute('aria-label', 'Remove from favorites');
         } else {
           btn.classList.remove('active');
           btn.innerHTML = '<i class="far fa-heart"></i>';
+          btn.setAttribute('aria-label', 'Add to favorites');
         }
       });
     }
@@ -451,7 +483,7 @@
       }
     }
 
-    // Load favorites
+    // Load favorites with lazy loading
     function loadFavorites() {
       const grid = document.getElementById('favoritesGrid');
       const emptyState = document.getElementById('emptyState');
@@ -473,14 +505,14 @@
         const card = document.createElement('div');
         card.className = 'cap-card';
         card.innerHTML = `
-          <a href="details.html?id=${cap.id}" style="text-decoration: none; color: inherit;">
-            <img src="${cap.image}" alt="${cap.name}" class="cap-image">
+          <a href="details.html?id=${cap.id}" style="text-decoration: none; color: inherit;" aria-label="${cap.name} - ${cap.price}">
+            <img src="${cap.image}" alt="${cap.name}" class="cap-image" loading="lazy" onerror="this.src='placeholder.jpg';this.alt='Cap image not available'">
             <div class="cap-info">
               <h3 class="cap-name">${cap.name}</h3>
               <p class="cap-price">${cap.price}</p>
             </div>
           </a>
-          <button class="favorite-btn active" data-cap-id="${cap.id}">
+          <button class="favorite-btn active" data-cap-id="${cap.id}" aria-label="Remove from favorites">
             <i class="fas fa-heart"></i>
           </button>
         `;
@@ -497,9 +529,11 @@
       if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
         body.classList.remove('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
     
