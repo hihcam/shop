@@ -1,30 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sacoche & Caba - Cap Gallery</title>
+  <title>Cap Gallery - Sacoche & Caba</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Reset and base styles */
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f0f4f8;
       margin: 0;
       padding: 0;
       color: #003366;
-      opacity: 0;
-      transition: opacity 0.5s ease, background-color 0.3s ease, color 0.3s ease;
-    }
-    body.visible {
-      opacity: 1;
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
     body.dark {
       background-color: #121212;
-      color: #eee;
+      color: #e0e0e0;
     }
-
-    /* Header */
     #whiteHeader {
       position: fixed;
       top: 0;
@@ -34,206 +27,166 @@
       background-color: white;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       z-index: 1000;
-
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      gap: 40px;
       padding: 0 20px;
       font-size: 18px;
       font-weight: 600;
       color: #1E3A8A;
-      position: relative;
       transition: background-color 0.4s ease, color 0.4s ease;
     }
     body.dark #whiteHeader {
-      background-color: #1E1E1E;
-      color: #9fc5e8;
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+      background-color: #1a1a1a;
+      color: #9fcfff;
+      box-shadow: 0 2px 8px rgba(255 255 255 / 0.1);
     }
-
     #siteTitle {
       flex-shrink: 0;
+      cursor: default;
     }
-
-    /* Search bar container - absolutely centered */
-    #searchContainer {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      max-width: 80vw;
-      z-index: 1001;
-    }
-
-    #searchInput {
-      width: 100%;
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 1px solid #1E3A8A;
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-    #searchInput:focus {
-      border-color: #003366;
-    }
-    body.dark #searchInput {
-      background-color: #333;
-      border-color: #9fc5e8;
-      color: #eee;
-    }
-    body.dark #searchInput:focus {
-      border-color: #c0d6f9;
-    }
-
-    /* Dark mode toggle button - exactly like your details page */
     #darkModeToggle {
-      position: fixed;
-      top: 12px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
+      cursor: pointer;
       background-color: #1E3A8A;
       border-radius: 50%;
+      width: 40px;
+      height: 40px;
       border: none;
-      cursor: pointer;
       color: white;
       font-size: 20px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      z-index: 1100;
+      justify-content: center;
       transition: background-color 0.3s ease;
+      flex-shrink: 0;
+      margin-left: 10px;
     }
     #darkModeToggle:hover {
-      background-color: #003366;
+      background-color: #3749a0;
     }
     body.dark #darkModeToggle {
-      background-color: #c0d6f9;
+      background-color: #f0f4f8;
       color: #1E3A8A;
     }
     body.dark #darkModeToggle:hover {
-      background-color: #9fc5e8;
+      background-color: #d4dbf5;
     }
 
-    /* Main gallery container */
-    #gallery {
+    main {
       max-width: 1200px;
-      margin: 80px auto 40px;
-      padding: 0 20px;
+      margin: 80px auto 60px; /* Start below header */
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 24px;
-      transition: color 0.3s ease;
+      padding: 0 12px;
+      transition: color 0.4s ease;
     }
-    body.dark #gallery {
-      color: #eee;
+    body.dark main a.card {
+      background-color: #222;
+      box-shadow: 0 2px 10px rgba(255 255 255 / 0.1);
     }
 
-    /* Card */
-    .card {
+    a.card {
       background-color: white;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
-      cursor: pointer;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px;
-      text-align: center;
-    }
-    body.dark .card {
-      background-color: #222;
-      box-shadow: 0 2px 10px rgba(255,255,255,0.1);
-    }
-    .card:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    }
-
-    .card img {
-      width: 140px;
-      height: auto;
-      margin-bottom: 12px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: box-shadow 0.3s ease;
     }
-    body.dark .card img {
-      box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+    a.card:hover {
+      box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
     }
-
-    .card h3 {
-      margin: 0 0 6px;
+    a.card img {
+      max-width: 100%;
+      height: 140px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      border-radius: 10px;
+    }
+    a.card h3 {
+      margin: 0 0 6px 0;
+      font-weight: 600;
       font-size: 18px;
+      text-align: center;
+    }
+    a.card p.price {
+      margin: 0;
+      font-weight: 700;
+      font-size: 16px;
       color: #1E3A8A;
     }
-    body.dark .card h3 {
-      color: #9fc5e8;
+    body.dark a.card p.price {
+      color: #a0c4ff;
     }
 
-    .card p {
-      margin: 0;
-      color: #555;
-      font-size: 14px;
-    }
-    body.dark .card p {
-      color: #bbb;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      #gallery {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    @media (max-width: 720px) {
-      #gallery {
+    @media (max-width: 900px) {
+      main {
         grid-template-columns: repeat(2, 1fr);
-      }
-      #searchContainer {
-        width: 220px;
       }
     }
     @media (max-width: 480px) {
-      #gallery {
+      main {
         grid-template-columns: 1fr;
       }
       #darkModeToggle {
         width: 32px;
         height: 32px;
         font-size: 16px;
-        top: 8px;
-        right: 12px;
-      }
-      #searchContainer {
-        width: 180px;
+        margin-left: 8px;
       }
     }
   </style>
 </head>
 <body>
-  <div id="whiteHeader">
+
+  <header id="whiteHeader">
     <div id="siteTitle">Sacoche & Caba</div>
-    <div id="searchContainer">
-      <input type="text" id="searchInput" placeholder="Search caps..." aria-label="Search caps" />
-    </div>
-  </div>
+    <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+  </header>
 
-  <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
-
-  <main id="gallery" aria-live="polite">
-    <!-- Cards will be injected by JS -->
+  <main id="capsGrid">
+    <!-- Cards will be injected here by JS -->
   </main>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      document.body.classList.add('visible');
-    });
+    const capsData = {
+      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png" },
+      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png" },
+      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png" },
+      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png" },
+      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png" },
+      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png" },
+      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png" },
+      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png" },
+      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png" },
+      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png" },
+      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png" },
+      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png" }
+    };
 
-    // Dark mode toggle with localStorage persistence
+    const capsGrid = document.getElementById('capsGrid');
+
+    function renderCaps() {
+      capsGrid.innerHTML = '';
+      Object.entries(capsData).forEach(([id, cap]) => {
+        const card = document.createElement('a');
+        card.href = `details.html?id=${id}`;
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${cap.image}" alt="${cap.name}" />
+          <h3>${cap.name}</h3>
+          <p class="price">${cap.price}</p>
+        `;
+        capsGrid.appendChild(card);
+      });
+    }
+
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
 
@@ -253,53 +206,8 @@
       }
     });
 
-    // Caps data (same as before)
-    const capsData = {
-      cap1: { name: "Blue Classic Cap", price: "$19.99", image: "cap1.png" },
-      cap2: { name: "Red Sport Cap", price: "$22.50", image: "cap2.png" },
-      cap3: { name: "Green Summer Cap", price: "$18.00", image: "cap3.png" },
-      cap4: { name: "Black Snapback", price: "$20.00", image: "cap4.png" },
-      cap5: { name: "White Casual Cap", price: "$24.99", image: "cap5.png" },
-      cap6: { name: "Yellow Vintage Cap", price: "$16.75", image: "cap6.png" },
-      cap7: { name: "Grey Minimalist Cap", price: "$21.30", image: "cap7.png" },
-      cap8: { name: "Brown Leather Cap", price: "$23.00", image: "cap8.png" },
-      cap9: { name: "Orange Bright Cap", price: "$17.50", image: "cap9.png" },
-      cap10: { name: "Purple Retro Cap", price: "$19.95", image: "cap10.png" },
-      cap11: { name: "Pink Floral Cap", price: "$26.40", image: "cap11.png" },
-      cap12: { name: "Navy Blue Cap", price: "$18.80", image: "cap12.png" }
-    };
-
-    // Function to create a card for each cap
-    function createCard(id, cap) {
-      const card = document.createElement('a');
-      card.className = 'card';
-      card.href = `details.html?id=${id}`;
-      card.setAttribute('aria-label', `${cap.name}, priced at ${cap.price}`);
-
-      card.innerHTML = `
-        <img src="${cap.image}" alt="${cap.name}" />
-        <h3>${cap.name}</h3>
-        <p>${cap.price}</p>
-      `;
-      return card;
-    }
-
-    const gallery = document.getElementById('gallery');
-
-    // Render all cards
-    for (const id in capsData) {
-      gallery.appendChild(createCard(id, capsData[id]));
-    }
-
-    // Optional: Add search filtering
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      for (const card of gallery.children) {
-        const name = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = name.includes(query) ? '' : 'none';
-      }
-    });
+    renderCaps();
   </script>
+
 </body>
 </html>
