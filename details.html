@@ -34,7 +34,7 @@
       background-color: #f8fafc;
       color: var(--text);
       line-height: 1.5;
-      transition: var(--transition);
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
     
     body.dark {
@@ -82,6 +82,40 @@
       font-size: 1.5rem;
     }
     
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .favorites-link {
+      color: var(--text);
+      font-size: 1.2rem;
+      transition: var(--transition);
+      position: relative;
+      display: none;
+    }
+    
+    .favorites-link:hover {
+      color: #ff4757;
+    }
+    
+    .favorites-link::after {
+      content: attr(data-count);
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
     /* Dark mode toggle */
     .theme-toggle {
       width: 44px;
@@ -122,6 +156,7 @@
       position: relative;
       border-radius: 12px;
       overflow: hidden;
+      background-color: #f1f5f9;
     }
     
     .product-image {
@@ -159,6 +194,50 @@
       margin-bottom: 2rem;
       color: var(--text-light);
       line-height: 1.7;
+    }
+    
+    /* Favorite button */
+    .favorite-btn {
+      margin-top: 1rem;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      width: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text);
+      transition: var(--transition);
+    }
+    
+    .favorite-btn:hover {
+      color: var(--primary);
+      transform: scale(1.02);
+    }
+    
+    .favorite-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .favorite-btn.active {
+      color: #ff4757;
+    }
+    
+    .favorite-btn i {
+      margin-right: 8px;
+    }
+    
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     
     /* Contact card */
@@ -225,6 +304,11 @@
       box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
     }
     
+    .back-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
       .product-container {
@@ -259,11 +343,11 @@
       }
       
       .product-title {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
       }
       
       .product-price {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
       }
       
       .contact-card {
@@ -288,9 +372,14 @@
       <i class="fas fa-crown brand-icon"></i>
       <span>Sacoche & Caba</span>
     </div>
-    <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
-      <i class="fas fa-moon"></i>
-    </button>
+    <div class="header-actions">
+      <a href="favorites.html" class="favorites-link" data-count="0" aria-label="View favorites">
+        <i class="fas fa-heart"></i>
+      </a>
+      <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
   </header>
 
   <main id="capDetails">
@@ -319,10 +408,61 @@
       email: "contact@sacoche-caba.dz"
     };
 
-    // Get cap ID from URL
+    // Favorite system
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+
+    function toggleFavorite(capId) {
+      if (favorites[capId]) {
+        delete favorites[capId];
+      } else {
+        favorites[capId] = true;
+      }
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      updateFavoriteButtons();
+      updateFavoritesCount();
+      
+      // Add visual feedback
+      const btn = document.querySelector(`.favorite-btn[data-cap-id="${capId}"]`);
+      if (btn) {
+        btn.classList.add('pulse');
+        setTimeout(() => btn.classList.remove('pulse'), 500);
+      }
+      
+      // Haptic feedback on mobile
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    function updateFavoriteButtons() {
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        const capId = btn.getAttribute('data-cap-id');
+        if (favorites[capId]) {
+          btn.classList.add('active');
+          btn.innerHTML = '<i class="fas fa-heart"></i> Remove from Favorites';
+          btn.setAttribute('aria-label', 'Remove from favorites');
+        } else {
+          btn.classList.remove('active');
+          btn.innerHTML = '<i class="far fa-heart"></i> Add to Favorites';
+          btn.setAttribute('aria-label', 'Add to favorites');
+        }
+      });
+    }
+
+    function updateFavoritesCount() {
+      const count = Object.keys(favorites).length;
+      const link = document.querySelector('.favorites-link');
+      if (link) {
+        link.setAttribute('data-count', count);
+        link.style.display = count > 0 ? 'block' : 'none';
+      }
+    }
+
+    // Get cap ID from URL with sanitization
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
+      const value = urlParams.get(param);
+      // Only allow valid cap IDs
+      if (/^cap\d{1,2}$/.test(value)) return value;
+      return null;
     }
 
     // Render cap details
@@ -333,6 +473,7 @@
         container.innerHTML = `
           <div style="text-align: center; padding: 2rem;">
             <h2 style="margin-bottom: 1rem;">Cap not found</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-light);">The cap you requested could not be found.</p>
             <a href="index.html" class="back-button">
               <i class="fas fa-arrow-left"></i> Back to Gallery
             </a>
@@ -342,10 +483,12 @@
       }
       
       const cap = capsData[id];
+      const isFavorite = !!favorites[id];
+      
       container.innerHTML = `
         <div class="product-container">
           <div class="product-gallery">
-            <img src="${cap.image}" alt="${cap.name}" class="product-image">
+            <img src="${cap.image}" alt="${cap.name}" class="product-image" onerror="this.src='placeholder.jpg';this.alt='Cap image not available'">
           </div>
           <div class="product-info">
             <h1 class="product-title">${cap.name}</h1>
@@ -353,6 +496,9 @@
               <i class="fas fa-tag"></i> ${cap.price}
             </p>
             <p class="product-description">${cap.description}</p>
+            <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-cap-id="${id}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+              <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i> ${isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+            </button>
           </div>
         </div>
         
@@ -386,9 +532,11 @@
       if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
       } else {
         body.classList.remove('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to dark mode');
       }
     }
     
@@ -401,10 +549,21 @@
       updateTheme();
     });
 
+    // Add event listeners for favorite buttons
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.favorite-btn')) {
+        const btn = e.target.closest('.favorite-btn');
+        const capId = btn.getAttribute('data-cap-id');
+        toggleFavorite(capId);
+      }
+    });
+
     // Initialize
     updateTheme();
+    updateFavoritesCount();
     const capId = getQueryParam('id');
     renderCapDetails(capId);
+    updateFavoriteButtons();
   </script>
 </body>
 </html>
